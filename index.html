@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Get the Coven skin mf</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Baloo+2:wght@600;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg1: #1a1446;
+    --bg2: #3b1c6e;
+    --gift: #e63946;
+    --gift-dark: #b02532;
+    --ribbon: #ffd166;
+    --ribbon-dark: #e0a800;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    background: radial-gradient(ellipse at center, var(--bg2), var(--bg1));
+    color: #fff;
+    font-family: "Baloo 2", system-ui, sans-serif;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  /* Floating background stars */
+  .stars span {
+    position: fixed; width: 3px; height: 3px; border-radius: 50%;
+    background: #fff; opacity: .6; animation: twinkle 3s infinite ease-in-out;
+  }
+  @keyframes twinkle { 50% { opacity: .1; transform: scale(.5); } }
+
+  .screen {
+    position: fixed; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 24px; padding: 16px;
+    transition: opacity .6s ease;
+  }
+  .hidden { opacity: 0; pointer-events: none; }
+
+  /* ---------- Start screen ---------- */
+  #start h1 {
+    font-size: clamp(28px, 6vw, 56px); text-align: center;
+    text-shadow: 0 4px 0 #000a;
+  }
+  #start p { opacity: .8; font-size: 18px; }
+  #continueBtn {
+    font-family: "Press Start 2P", monospace; font-size: 16px;
+    padding: 20px 32px; border: none; border-radius: 14px; cursor: pointer;
+    background: linear-gradient(#4ade80, #16a34a); color: #fff;
+    box-shadow: 0 8px 0 #0f5f2e, 0 12px 30px #0008;
+    animation: pulse 1.4s infinite ease-in-out;
+  }
+  #continueBtn:active { transform: translateY(6px); box-shadow: 0 2px 0 #0f5f2e; }
+  @keyframes pulse { 50% { transform: scale(1.07); } }
+
+  /* ---------- Gift box ---------- */
+  #stage { perspective: 800px; }
+  .gift {
+    position: relative; width: 200px; height: 200px;
+    animation: drop 1s cubic-bezier(.3,1.6,.5,1) both;
+  }
+  .gift.shake { animation: shake .5s ease-in-out 3; }
+  @keyframes drop {
+    from { transform: translateY(-120vh) rotate(-20deg); }
+    to   { transform: translateY(0) rotate(0); }
+  }
+  @keyframes shake {
+    0%,100% { transform: rotate(0); }
+    25% { transform: rotate(-8deg) scale(1.05); }
+    75% { transform: rotate(8deg) scale(1.05); }
+  }
+  .box {
+    position: absolute; bottom: 0; left: 10px; width: 180px; height: 140px;
+    background: linear-gradient(90deg, var(--gift-dark), var(--gift) 30%, var(--gift) 70%, var(--gift-dark));
+    border-radius: 6px; box-shadow: 0 20px 40px #0008; overflow: visible;
+  }
+  .box::before { /* vertical ribbon */
+    content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 30px;
+    transform: translateX(-50%);
+    background: linear-gradient(90deg, var(--ribbon-dark), var(--ribbon), var(--ribbon-dark));
+    z-index: 3;
+  }
+  .box-inner { /* dark inside visible once lid is gone */
+    position: absolute; top: 0; left: 8px; right: 8px; height: 18px;
+    background: #4a0d13; border-radius: 0 0 50% 50% / 0 0 100% 100%; z-index: 2;
+  }
+  .lid {
+    position: absolute; top: 30px; left: 0; width: 200px; height: 44px; z-index: 5;
+    background: linear-gradient(90deg, var(--gift-dark), var(--gift) 30%, var(--gift) 70%, var(--gift-dark));
+    border-radius: 6px; box-shadow: 0 6px 10px #0006;
+    transform-origin: center bottom;
+  }
+  .lid::before {
+    content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 34px;
+    transform: translateX(-50%);
+    background: linear-gradient(90deg, var(--ribbon-dark), var(--ribbon), var(--ribbon-dark));
+  }
+  .bow { position: absolute; top: -34px; left: 50%; transform: translateX(-50%); width: 100px; height: 40px; }
+  .bow i {
+    position: absolute; bottom: 0; width: 46px; height: 36px; border: 10px solid var(--ribbon);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  }
+  .bow i:first-child { left: 0; transform: rotate(-20deg); }
+  .bow i:last-child { right: 0; transform: rotate(20deg); }
+  .bow b {
+    position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 20px; height: 20px; background: var(--ribbon-dark); border-radius: 50%;
+  }
+  .lid.open { animation: lidOff 1s cubic-bezier(.2,.8,.3,1) forwards; }
+  @keyframes lidOff {
+    0%   { transform: translate(0,0) rotate(0); }
+    30%  { transform: translate(0,-30px) rotate(-5deg); }
+    100% { transform: translate(260px,-320px) rotate(70deg); opacity: 0; }
+  }
+  .glow {
+    position: absolute; left: 50%; top: 60px; width: 10px; height: 10px; z-index: 1;
+    transform: translate(-50%,-50%); border-radius: 50%;
+    background: radial-gradient(circle, #fff8 0%, #ffd16644 40%, transparent 70%);
+    transition: all 1s ease;
+  }
+  .glow.on { width: 600px; height: 600px; }
+  .glow.on::after {
+    content: ""; position: absolute; inset: 0; border-radius: 50%;
+    background: repeating-conic-gradient(#fff2 0 10deg, transparent 10deg 20deg);
+    animation: spin 8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ---------- Gift card ---------- */
+  .card {
+    position: absolute; left: 50%; top: 50%; width: min(360px, 90vw);
+    transform: translate(-50%, 0) scale(.3); opacity: 0; z-index: 10;
+    background: linear-gradient(160deg, #111 0%, #2b2b2b 100%);
+    border-radius: 20px; padding: 22px; text-align: center;
+    box-shadow: 0 30px 60px #000c, 0 0 0 4px #fff2 inset;
+    transition: transform 1.2s cubic-bezier(.2,1.3,.4,1), opacity .5s ease;
+  }
+  .card.out { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  .roblox-title {
+    font-family: "Baloo 2", sans-serif; font-weight: 800; letter-spacing: 2px;
+    font-size: 40px; line-height: 1; color: #fff; text-transform: uppercase;
+    text-shadow: 3px 3px 0 #e2231a;
+  }
+  .roblox-title .o {
+    display: inline-block; width: .62em; height: .62em; background: #fff;
+    transform: rotate(15deg); margin: 0 2px; position: relative; top: -2px;
+  }
+  .roblox-title .o::after {
+    content: ""; position: absolute; inset: 35%; background: #111;
+  }
+  .subtitle { font-size: 14px; opacity: .7; margin-bottom: 14px; letter-spacing: 3px; }
+
+  /* Minecraft-style grass block drawn in CSS */
+  .mc-wrap { display: flex; justify-content: center; margin: 6px 0 18px; }
+  .mc-block { width: 110px; height: 110px; animation: float 3s ease-in-out infinite; }
+  @keyframes float { 50% { transform: translateY(-8px); } }
+
+  /* Scratch area */
+  .scratch {
+    position: relative; height: 70px; border-radius: 12px; overflow: hidden;
+    background: #fff; color: #111;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .code {
+    font-family: "Press Start 2P", monospace; font-size: clamp(10px, 3.3vw, 13px);
+    letter-spacing: 1px; white-space: nowrap; opacity: 0; transition: opacity .4s linear;
+  }
+  #scratchCanvas {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    cursor: grab; touch-action: none; transition: opacity 1s ease;
+  }
+  .hint { font-size: 14px; margin-top: 10px; opacity: .75; }
+
+  /* Confetti */
+  .confetti {
+    position: fixed; width: 10px; height: 14px; top: -20px; z-index: 20; pointer-events: none;
+    animation: fall linear forwards;
+  }
+  @keyframes fall {
+    to { transform: translateY(110vh) rotate(720deg); }
+  }
+
+  #muteBtn {
+    position: fixed; top: 16px; right: 16px; z-index: 30; background: #0006; color: #fff;
+    border: 1px solid #fff4; border-radius: 50%; width: 44px; height: 44px; font-size: 20px; cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+<button id="muteBtn" class="hidden" aria-label="Toggle music">🔊</button>
+
+<!-- Screen 1 -->
+<section class="screen" id="start">
+  <h1>🎁 Get the Coven skin mf 🎁</h1>
+  <p>Turn your sound on</p>
+  <button id="continueBtn">PRESS TO CONTINUE</button>
+</section>
+
+<!-- Screen 2 -->
+<section class="screen hidden" id="giftScreen">
+  <div id="stage">
+    <div class="gift" id="gift">
+      <div class="glow" id="glow"></div>
+      <div class="box"><div class="box-inner"></div></div>
+      <div class="lid" id="lid">
+        <div class="bow"><i></i><i></i><b></b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="card">
+    <div class="roblox-title">R<span class="o"></span>BL<span class="o"></span>X</div>
+    <div class="subtitle">GIFT CARD</div>
+
+    <div class="mc-wrap">
+      <!-- Minecraft-style grass block (hand-drawn SVG pixel art) -->
+      <svg class="mc-block" viewBox="0 0 100 100" shape-rendering="crispEdges">
+        <!-- top -->
+        <polygon points="50,5 95,27 50,49 5,27" fill="#6cc24a"/>
+        <polygon points="50,12 80,27 50,42 20,27" fill="#7fd35a" opacity=".6"/>
+        <!-- left side -->
+        <polygon points="5,27 50,49 50,95 5,73" fill="#8b5a2b"/>
+        <polygon points="5,27 50,49 50,58 5,36" fill="#4fa531"/>
+        <polygon points="5,36 16,41.5 16,46 5,40.5" fill="#4fa531"/>
+        <polygon points="28,47 38,52 38,57 28,52" fill="#4fa531"/>
+        <polygon points="12,55 20,59 20,63 12,59" fill="#6e4520"/>
+        <polygon points="30,68 40,73 40,77 30,72" fill="#6e4520"/>
+        <polygon points="15,70 22,73.5 22,77 15,73.5" fill="#a0703d"/>
+        <!-- right side -->
+        <polygon points="95,27 50,49 50,95 95,73" fill="#6e4520"/>
+        <polygon points="95,27 50,49 50,58 95,36" fill="#3f8a26"/>
+        <polygon points="95,36 84,41.5 84,46 95,40.5" fill="#3f8a26"/>
+        <polygon points="72,47 62,52 62,57 72,52" fill="#3f8a26"/>
+        <polygon points="85,58 77,62 77,66 85,62" fill="#5a3818"/>
+        <polygon points="68,72 58,77 58,81 68,76" fill="#8b5a2b"/>
+      </svg>
+    </div>
+
+    <div class="scratch">
+      <div class="code" id="code"></div>
+      <canvas id="scratchCanvas"></canvas>
+    </div>
+    <div class="hint" id="hint">🪙 Scratch with your mouse to reveal your code!</div>
+  </div>
+</section>
+
+<script>
+  // ================== CONFIG ==================
+  // Put your real gift card code here:
+  const GIFT_CODE = "RA-HFGPSK84LF7BSNMY";
+  // Optional: drop a file named "music.mp3" next to this page to use your own song.
+  // If it's missing, a built-in chiptune melody plays instead.
+  const MUSIC_FILE = "music.mp3";
+  // ============================================
+
+  // Background stars
+  const starsEl = document.getElementById("stars");
+  for (let i = 0; i < 60; i++) {
+    const s = document.createElement("span");
+    s.style.left = Math.random() * 100 + "vw";
+    s.style.top = Math.random() * 100 + "vh";
+    s.style.animationDelay = Math.random() * 3 + "s";
+    starsEl.appendChild(s);
+  }
+
+  // ---------- Music ----------
+  let audioCtx, masterGain, musicTimer, fileAudio, muted = false;
+
+  function startSynthMusic() {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = 0.12;
+    masterGain.connect(audioCtx.destination);
+
+    // A cheerful little loop (MIDI note numbers, 0 = rest)
+    const melody = [72,76,79,84, 83,79,76,79, 74,77,81,86, 84,81,77,81,
+                    72,76,79,84, 86,84,83,79, 77,81,79,76, 72,0,72,0];
+    const bass   = [48,48,55,55, 52,52,55,55, 50,50,57,57, 53,53,57,57];
+    const step = 0.18;
+    let n = 0, nextTime = audioCtx.currentTime + 0.05;
+
+    const note = (midi, t, dur, type, vol) => {
+      if (!midi) return;
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.type = type;
+      o.frequency.value = 440 * Math.pow(2, (midi - 69) / 12);
+      g.gain.setValueAtTime(vol, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+      o.connect(g).connect(masterGain);
+      o.start(t); o.stop(t + dur);
+    };
+
+    musicTimer = setInterval(() => {
+      while (nextTime < audioCtx.currentTime + 0.3) {
+        note(melody[n % melody.length], nextTime, step * 0.9, "square", 0.5);
+        if (n % 2 === 0) note(bass[(n / 2) % bass.length], nextTime, step * 1.8, "triangle", 0.9);
+        nextTime += step; n++;
+      }
+    }, 50);
+  }
+
+  function startMusic() {
+    fileAudio = new Audio(MUSIC_FILE);
+    fileAudio.loop = true;
+    fileAudio.volume = 0.6;
+    fileAudio.play().catch(() => { fileAudio = null; startSynthMusic(); });
+    fileAudio.addEventListener("error", () => {
+      if (fileAudio) { fileAudio = null; startSynthMusic(); }
+    });
+  }
+
+  function sfx(freqs, type = "sine", spacing = 0.07) {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (muted) return;
+    freqs.forEach((f, i) => {
+      const t = audioCtx.currentTime + i * spacing;
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.type = type; o.frequency.value = f;
+      g.gain.setValueAtTime(0.15, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+      o.connect(g).connect(audioCtx.destination);
+      o.start(t); o.stop(t + 0.3);
+    });
+  }
+
+  const muteBtn = document.getElementById("muteBtn");
+  muteBtn.onclick = () => {
+    muted = !muted;
+    muteBtn.textContent = muted ? "🔇" : "🔊";
+    if (fileAudio) fileAudio.muted = muted;
+    if (masterGain) masterGain.gain.value = muted ? 0 : 0.12;
+  };
+
+  // ---------- Flow ----------
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+
+  document.getElementById("continueBtn").onclick = async () => {
+    startMusic();
+    muteBtn.classList.remove("hidden");
+    document.getElementById("start").classList.add("hidden");
+    document.getElementById("giftScreen").classList.remove("hidden");
+
+    const gift = document.getElementById("gift");
+    await wait(1100);                         // box drops in
+    sfx([200, 150], "triangle");
+    gift.classList.add("shake");              // box wiggles
+    await wait(1600);
+    gift.style.animation = "none";            // stop the drop animation from replaying
+    gift.classList.remove("shake");
+
+    document.getElementById("lid").classList.add("open");  // lid pops off
+    sfx([523, 659, 784, 1047], "square");
+    document.getElementById("glow").classList.add("on");
+    confetti(120);
+    await wait(500);
+
+    document.getElementById("card").classList.add("out");  // card rises out
+    await wait(300);
+    gift.style.transition = "opacity 1s, transform 1s";
+    gift.style.opacity = "0.25";
+    gift.style.transform = "translateY(140px) scale(.8)";
+    setupScratch();
+  };
+
+  function confetti(count) {
+    const colors = ["#ffd166", "#ef476f", "#06d6a0", "#118ab2", "#fff", "#e2231a"];
+    for (let i = 0; i < count; i++) {
+      const c = document.createElement("div");
+      c.className = "confetti";
+      c.style.left = Math.random() * 100 + "vw";
+      c.style.background = colors[i % colors.length];
+      c.style.animationDuration = 2 + Math.random() * 2.5 + "s";
+      c.style.animationDelay = Math.random() * 0.8 + "s";
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 5500);
+    }
+  }
+
+  // ---------- Scratch card ----------
+  function setupScratch() {
+    const canvas = document.getElementById("scratchCanvas");
+    const codeEl = document.getElementById("code");
+    const hint = document.getElementById("hint");
+    codeEl.textContent = GIFT_CODE;
+
+    const rect = canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    const ctx = canvas.getContext("2d");
+    ctx.scale(dpr, dpr);
+
+    // Silver scratch-off coating
+    const grad = ctx.createLinearGradient(0, 0, rect.width, rect.height);
+    grad.addColorStop(0, "#9ea3a8"); grad.addColorStop(.5, "#e3e6e8"); grad.addColorStop(1, "#8c9196");
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, rect.width, rect.height);
+    for (let i = 0; i < 400; i++) {       // sparkly texture
+      ctx.fillStyle = Math.random() > .5 ? "#ffffff55" : "#00000022";
+      ctx.fillRect(Math.random() * rect.width, Math.random() * rect.height, 2, 2);
+    }
+    ctx.fillStyle = "#555";
+    ctx.font = "bold 16px 'Baloo 2', sans-serif";
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText("✦ SCRATCH HERE ✦", rect.width / 2, rect.height / 2);
+
+    ctx.globalCompositeOperation = "destination-out";
+
+    let scratching = false, last = null, done = false, checkCounter = 0;
+    const BRUSH = 9; // small brush = slow, satisfying scratch
+
+    const pos = e => {
+      const r = canvas.getBoundingClientRect();
+      return { x: e.clientX - r.left, y: e.clientY - r.top };
+    };
+
+    const scratchLine = (a, b) => {
+      // Soft-edged brush with partial alpha so it wears away gradually
+      const dist = Math.hypot(b.x - a.x, b.y - a.y);
+      const steps = Math.max(1, Math.ceil(dist / 3));
+      for (let i = 0; i <= steps; i++) {
+        const x = a.x + (b.x - a.x) * (i / steps);
+        const y = a.y + (b.y - a.y) * (i / steps);
+        const g = ctx.createRadialGradient(x, y, 0, x, y, BRUSH);
+        g.addColorStop(0, "rgba(0,0,0,0.35)");
+        g.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = g;
+        ctx.beginPath(); ctx.arc(x, y, BRUSH, 0, Math.PI * 2); ctx.fill();
+      }
+    };
+
+    const clearedFraction = () => {
+      const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+      let clear = 0, total = 0;
+      for (let i = 3; i < data.length; i += 32) { total++; clear += 1 - data[i] / 255; }
+      return clear / total;
+    };
+
+    const update = () => {
+      const f = clearedFraction();
+      // The code fades in slowly as more of the coating is removed
+      codeEl.style.opacity = Math.min(1, f * 1.6);
+      if (f > 0.6 && !done) finish();
+    };
+
+    const finish = () => {
+      done = true;
+      canvas.style.opacity = 0;
+      codeEl.style.opacity = 1;
+      canvas.style.pointerEvents = "none";
+      hint.textContent = "🎉 Enjoy your gift! 🎉";
+      sfx([784, 988, 1175, 1568], "triangle", 0.1);
+      confetti(150);
+    };
+
+    canvas.addEventListener("pointerdown", e => {
+      scratching = true; last = pos(e);
+      canvas.setPointerCapture(e.pointerId);
+      scratchLine(last, last);
+    });
+    canvas.addEventListener("pointermove", e => {
+      if (!scratching || done) return;
+      const p = pos(e);
+      scratchLine(last, p);
+      last = p;
+      if (++checkCounter % 6 === 0) update();
+    });
+    const stop = () => { if (scratching) { scratching = false; update(); } };
+    canvas.addEventListener("pointerup", stop);
+    canvas.addEventListener("pointercancel", stop);
+  }
+</script>
+</body>
+</html>
